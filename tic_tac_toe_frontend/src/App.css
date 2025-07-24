@@ -1,6 +1,5 @@
 /* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
   --text-primary: #282c34;
@@ -8,10 +7,21 @@
   --border-color: #e9ecef;
   --button-bg: #007bff;
   --button-text: #ffffff;
+
+  /* Tic Tac Toe theme palette */
+  --ttt-primary: #1976d2;
+  --ttt-secondary: #424242;
+  --ttt-accent: #ff9800;
+  --ttt-bg: #fff;
+  --ttt-border: #e0e0e0;
+  --ttt-tile-shadow: rgba(25,118,210,0.12);
+  --ttt-tile-x: #1976d2;
+  --ttt-tile-o: #ff9800;
+  --ttt-msg-win: #1976d2;
+  --ttt-msg-draw: #424242;
 }
 
 [data-theme="dark"] {
-  /* Dark theme colors */
   --bg-primary: #1a1a1a;
   --bg-secondary: #282c34;
   --text-primary: #ffffff;
@@ -21,84 +31,174 @@
   --button-text: #ffffff;
 }
 
-.App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+/* ------ Tic Tac Toe App Custom Styles ------ */
+
+.ttt-root {
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
+  background: var(--ttt-bg);
+  color: var(--ttt-secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  padding-top: 6vh;
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+.ttt-title {
+  font-size: 2.7rem;
+  color: var(--ttt-primary);
+  margin-bottom: 32px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-align: center;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
+/* Board and Squares */
+.ttt-board-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+.ttt-board {
+  background: var(--ttt-bg);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px -8px var(--ttt-tile-shadow);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+.ttt-row {
+  display: flex;
+  flex-direction: row;
+}
+.ttt-square {
+  width: 72px;
+  height: 72px;
+  margin: 6px;
+  background: #fff;
+  border: 2px solid var(--ttt-border);
+  border-radius: 16px;
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--ttt-secondary);
+  outline: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px -8px var(--ttt-secondary);
+  transition: border 0.1s, box-shadow 0.18s, background 0.2s;
+  will-change: transform;
+}
+.ttt-square:hover {
+  border-color: var(--ttt-accent);
+  box-shadow: 0 3px 14px -6px var(--ttt-accent);
+  z-index: 2;
+}
+.ttt-square.ttt-x {
+  color: var(--ttt-tile-x);
+  text-shadow: 0 2px 6px rgba(25,118,210,0.09);
+}
+.ttt-square.ttt-o {
+  color: var(--ttt-tile-o);
+  text-shadow: 0 2px 6px rgba(255,152,0,0.13);
+}
+.ttt-square.ttt-highlight {
+  background: #f1f8e9;
+  border-color: var(--ttt-primary);
+  animation: ttt-highlight-fade 1.4s linear infinite alternate;
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
-}
-
-.theme-toggle:active {
-  transform: translateY(0);
-}
-
-@keyframes App-logo-spin {
+@keyframes ttt-highlight-fade {
   from {
-    transform: rotate(0deg);
+    background: #f1f8e9;
   }
   to {
-    transform: rotate(360deg);
+    background: #e3f2fd;
   }
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+/* Status Area */
+.ttt-status {
+  font-size: 1.19rem;
+  margin: 18px 0 6px 0;
+  font-weight: 500;
+  color: var(--ttt-secondary);
+  transition: color 0.3s;
+  text-align: center;
+}
+.ttt-status.ttt-win {
+  color: var(--ttt-msg-win);
+  font-weight: 700;
+  letter-spacing: 1.9px;
+}
+.ttt-status.ttt-draw {
+  color: var(--ttt-msg-draw);
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* Button Styles */
+.ttt-btn {
+  appearance: none;
+  display: inline-block;
+  margin: 0 auto;
+  background: var(--ttt-primary);
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 10px -8px var(--ttt-accent);
+  cursor: pointer;
+  transition: background 0.18s, transform 0.13s;
+  margin-top: 14px;
+  margin-bottom: 16px;
+  outline: none;
+}
+.ttt-btn:hover,
+.ttt-btn:focus {
+  background: var(--ttt-accent);
+  color: #fff;
+  box-shadow: 0 2px 18px -6px var(--ttt-accent);
+  transform: translateY(-1px) scale(1.03);
+}
+
+.ttt-footer {
+  margin-top: 18px;
+  font-size: 0.95rem;
+  color: #999;
+  letter-spacing: 2px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 700px) {
+  .ttt-board {
+    padding: 6px;
+    box-shadow: 0 2px 10px -4px var(--ttt-tile-shadow);
+  }
+  .ttt-square {
+    width: 54px;
+    height: 54px;
+    font-size: 1.47rem;
+    border-radius: 13px;
+    margin: 3px;
+  }
+  .ttt-title {
+    font-size: 1.45rem;
+  }
+  .ttt-status {
+    font-size: 1rem;
+  }
+  .ttt-btn {
+    padding: 9px 22px;
+    font-size: 0.97rem;
   }
 }
+
